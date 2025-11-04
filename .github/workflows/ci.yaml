@@ -40,6 +40,8 @@ jobs:
 
       - name: Prepare Build Arguments
         run: |
+          WAL_G_VERSION=$(echo "${{ matrix.versions.wal_g }}" | cut -d'#' -f1 | xargs)
+          echo "WAL_G_VERSION=$WAL_G_VERSION" >> $GITHUB_ENV
           WAL_G_VERSION_MAPPED=$(echo "${{ matrix.versions.wal_g }}" | cut -d'#' -f2 | xargs)
           echo "WAL_G_VERSION_MAPPED=$WAL_G_VERSION_MAPPED" >> $GITHUB_ENV
 
@@ -61,8 +63,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/386,linux/amd64
+          platforms: linux/amd64
           build-args: |
             BASE_IMAGE_VERSION=${{matrix.versions.postgres}}
-            WAL_G_VERSION=${{env.WAL_G_VERSION_MAPPED}}
-          tags: "baunach/${{ github.event.repository.name }}:${{ matrix.versions.postgres }}-$(echo '${{ matrix.versions.wal_g }}' | cut -d'#' -f2 | xargs)"
+            WAL_G_VERSION=${{env.WAL_G_VERSION}}
+          tags: "baunach/${{ github.event.repository.name }}:${{ matrix.versions.postgres }}-${{ env.WAL_G_VERSION_MAPPED }}"
