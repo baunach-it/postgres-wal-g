@@ -2,7 +2,10 @@ name: Postgres Backup & Restore
 on:
   push:
     branches: [main]
-
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'
+    
 jobs:
   get-postgres-versions:
       runs-on: ubuntu-latest
